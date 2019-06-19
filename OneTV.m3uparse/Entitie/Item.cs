@@ -6,9 +6,9 @@ namespace OneTV.m3uparse.Entitie
 {
    public class Item
     {
-        public int Logo { get; set; }
-        public int Nombre { get; set; }
-        public int Url { get; set; }
+        public string Logo { get; set; }
+        public string Nombre { get; set; }
+        public string Url { get; set; }
 
     }
 }

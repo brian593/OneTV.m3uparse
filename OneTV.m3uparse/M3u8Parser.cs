@@ -1,15 +1,13 @@
 ﻿
 namespace OneTV.m3uparse
 {
+    using OneTV.m3uparse.Entitie;
     using System;
-    using System.Collections.Generic;
-    using System.Globalization;
+    using System.Collections.ObjectModel;
     using System.IO;
     using System.Linq;
     using System.Net;
     using System.Text.RegularExpressions;
-    using System.Threading.Tasks;
-
     public class M3u8Parser 
     {
      
@@ -26,18 +24,31 @@ namespace OneTV.m3uparse
         private async void ParseContent(string Content)
         {
             var lines = Content.Split(new[] { "#EXTINF" }, StringSplitOptions.None);
-            
+            ObservableCollection<Item> Lista = new ObservableCollection<Item>();
+            Item itemAux = new Item();
             foreach (var item in lines)
             {
+                
                 string[] words = item.Split(' ').ToArray();
                 foreach (var word in words)
                 {
                     if (IsUrl(word))
                     {
-                        Console.WriteLine(word);
+                        if (word.Contains("tvg-logo="))
+                        {
+                            var a=  word.Remove(0, 10).Replace('"',' ').Replace(',', ' ');
+                            Console.WriteLine("Imagen:"+a);
+                            itemAux.Logo = a;
+                        }
+                        else
+                        {
+                            itemAux.Url = word;
+                            Console.WriteLine("Url:" + word);
+                        }
                     }
                 }
-
+                Lista.Add(itemAux);
+                itemAux = new Item();
             }
         }
         private static bool IsUrl(string url)
