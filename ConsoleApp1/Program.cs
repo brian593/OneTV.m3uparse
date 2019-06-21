@@ -19,11 +19,12 @@ namespace ConsoleApp1
         private static async void inicio()
         {
             OneTV.m3uparse.M3u8Parser m3U8Parser = new OneTV.m3uparse.M3u8Parser();
-            ObservableCollection<OneTV.m3uparse.Entitie.Item> Lista = new ObservableCollection<OneTV.m3uparse.Entitie.Item>;
+            ObservableCollection<OneTV.m3uparse.Entitie.Item> Lista = new ObservableCollection<OneTV.m3uparse.Entitie.Item>();
 
 
-            string fileLocation = "http://srregio.xyz/IPTV/regioflix.m3u";
+            string fileLocation = "https://pastebin.com/raw/bU1c2Lju";
             //https://pastebin.com/raw/bU1c2Lju
+            //http://srregio.xyz/IPTV/regioflix.m3u
 
             m3U8Parser.ParseUrl(fileLocation);
            

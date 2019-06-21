@@ -23,32 +23,70 @@ namespace OneTV.m3uparse
         }
         private async void ParseContent(string Content)
         {
-            var lines = Content.Split(new[] { "#EXTINF" }, StringSplitOptions.None);
+            var itemobj = Content.Split(new[] { "#EXTINF" }, StringSplitOptions.None);
+           
             ObservableCollection<Item> Lista = new ObservableCollection<Item>();
             Item itemAux = new Item();
-            foreach (var item in lines)
+            foreach (var item in itemobj)
             {
-                
-                string[] words = item.Split(' ').ToArray();
-                foreach (var word in words)
+                Console.WriteLine("-----------------------------------------------------------------------------");
+                var lines = item.Replace("\r", "").Split('\n');
+                foreach (var itemline in lines.Select((Value, Index) => new { Value, Index }))
                 {
-                    if (IsUrl(word))
+                   // Console.WriteLine(itemline.Index + " " + itemline.Value);
+                    string[] words = itemline.Value.Split(' ').ToArray();
+                    int inicio=0, fin=0, cont=0;
+                    foreach (var word in words.Select((Value, Index) => new { Value, Index }))
                     {
-                        if (word.Contains("tvg-logo="))
+
+                        if (IsUrl(word.Value))
                         {
-                            var a=  word.Remove(0, 10).Replace('"',' ').Replace(',', ' ');
-                            Console.WriteLine("Imagen:"+a);
-                            itemAux.Logo = a;
+                            if (word.Value.Contains("tvg-logo="))
+                            {
+
+
+                                var a = word.Value.Remove(0, 10).Replace('"', ' ');
+                                Console.WriteLine("Imagen:" + a);
+                                itemAux.Logo = a;
+
+                            }
+                            else
+                            {
+                                //string[] miniwords = word.Split('\n').ToArray();
+                                //if(miniwords.Length>1)
+                                //{                                                                                                
+                                //    Console.WriteLine("mnw1:" + miniwords[0]);
+                                //    Console.WriteLine("mnw2:" + miniwords[1]);
+                                //}
+
+                                itemAux.Url = word.Value;
+                                Console.WriteLine("Url:" + word.Value);
+                            }
+
                         }
                         else
                         {
-                            itemAux.Url = word;
-                            Console.WriteLine("Url:" + word);
+                            if (word.Value.Contains("group-title="))
+                            {
+                                var a = word.Value.Remove(0, 13).Replace('"', ' ');
+                                Console.WriteLine("Imagen:" + a);
+                            }
+                            else
+                            {
+                                Console.WriteLine("No url:" + word.Value);
+                            }
+
                         }
+
                     }
+                   // Console.WriteLine("el inicio {0} y el fin{1}", inicio, fin);
+
+                    Lista.Add(itemAux);
+                    itemAux = new Item();
+
+                    inicio = new int();
+                    fin = new int();
                 }
-                Lista.Add(itemAux);
-                itemAux = new Item();
             }
         }
         private static bool IsUrl(string url)
