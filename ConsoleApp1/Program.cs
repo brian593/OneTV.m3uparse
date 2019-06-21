@@ -22,12 +22,11 @@ namespace ConsoleApp1
             ObservableCollection<OneTV.m3uparse.Entitie.Item> Lista = new ObservableCollection<OneTV.m3uparse.Entitie.Item>();
 
 
-            string fileLocation = "https://pastebin.com/raw/bU1c2Lju";
+            string fileLocation = "http://srregio.xyz/IPTV/regioflix.m3u";
             //https://pastebin.com/raw/bU1c2Lju
             //http://srregio.xyz/IPTV/regioflix.m3u
-
-            m3U8Parser.ParseUrl(fileLocation);
-           
+            Lista = await m3U8Parser.ParseUrl(fileLocation);
+            _ = Lista.Count;           
         }
     }
 }
